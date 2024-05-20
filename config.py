@@ -183,6 +183,10 @@ def init_embeddings(provider, model):
         )
     elif provider == "huggingfacetei":
         return HuggingFaceHubEmbeddings(model=model)
+    elif provider == "huggingfacesmall":
+        return HuggingFaceEmbeddings(
+            model_name=model, encode_kwargs={"normalize_embeddings": True}
+        )
     elif provider == "ollama":
         return OllamaEmbeddings(model=model, base_url=OLLAMA_BASE_URL)
     else:
@@ -209,6 +213,11 @@ elif EMBEDDINGS_PROVIDER == "huggingfacetei":
 
 elif EMBEDDINGS_PROVIDER == "ollama":
     EMBEDDINGS_MODEL = get_env_variable("EMBEDDINGS_MODEL", "nomic-embed-text")
+
+elif EMBEDDINGS_PROVIDER == "huggingfacesmall":
+    EMBEDDINGS_MODEL = get_env_variable(
+        "EMBEDDINGS_MODEL", "avsolatorio/NoInstruct-small-Embedding-v0"
+    )
 else:
     raise ValueError(f"Unsupported embeddings provider: {EMBEDDINGS_PROVIDER}")
 
